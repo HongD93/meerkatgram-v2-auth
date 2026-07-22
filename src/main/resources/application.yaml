@@ -63,20 +63,19 @@ logging:
     com.msameerkatgramv2auth.controllers: debug
     com.msameerkatgramv2auth.global.errors: debug
 
-# Security & JWT
-security:
-  jwt:
-    secure: false
-    issuer: meerkat@meerkat.kr
-    type: JWT
-    access-token-expiry: 100000000
-    refresh-token-expiry: 1296000000
-    refresh-token-cookie-name: refresh-token
-    refresh-token-cookie-expiry: 1296000
-    secret: ${JWT_SECRET}
-    header-key: Authorization
-    scheme: Bearer
-    reissue-uri: /api/auth/reissue-token
+# JWT
+jwt:
+  secure: false
+  issuer: meerkat@meerkat.kr
+  type: JWT
+  access-token-expiry: 100000000
+  refresh-token-expiry: 1296000000
+  refresh-token-cookie-name: refresh-token
+  refresh-token-cookie-expiry: 1296000
+  secret: ${JWT_SECRET}
+  header-key: Authorization
+  scheme: Bearer
+  reissue-uri: /api/auth/reissue-token
 
 # file
 file:

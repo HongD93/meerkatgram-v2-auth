@@ -1,6 +1,8 @@
 package com.meerkatgramv2auth.domain.auth.controller;
 
 import com.meerkatgramv2auth.domain.auth.request.LoginRequestDTO;
+import com.meerkatgramv2auth.domain.auth.response.AuthResponseDTO;
+import com.meerkatgramv2auth.domain.auth.service.AuthService;
 import com.meerkatgramv2auth.global.response.GlobalRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,12 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<GlobalRes<Void>> login(
+    public ResponseEntity<GlobalRes<AuthResponseDTO>> login(
         @Valid @RequestBody LoginRequestDTO loginRequestDTO,
         HttpServletResponse response
     ) {
-        return ResponseEntity.ok(GlobalRes.success());
+        return ResponseEntity.ok(GlobalRes.success(authService.login(response, loginRequestDTO)));
     }
 }
