@@ -1,7 +1,7 @@
 package com.meerkatgramv2auth.global.error;
 
 import com.meerkatgramv2auth.global.error.custom.*;
-import com.meerkatgramv2auth.global.response.GlobalRes;
+import com.meerkatgramv2auth.global.response.GlobalResponseDTO;
 import com.meerkatgramv2auth.global.response.constant.CustomResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,19 +23,19 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private ResponseEntity<GlobalRes<Void>> generateErrorResponse(CustomResponseCode customResponseCode) {
+    private ResponseEntity<GlobalResponseDTO<Void>> generateErrorResponse(CustomResponseCode customResponseCode) {
         return ResponseEntity.status(customResponseCode.getHttpStatus())
-            .body(GlobalRes.<Void>from(customResponseCode));
+            .body(GlobalResponseDTO.<Void>from(customResponseCode));
     }
 
     @ExceptionHandler(NotRegisteredException.class)
-    public ResponseEntity<GlobalRes<Void>> notRegisteredHandle(NotRegisteredException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> notRegisteredHandle(NotRegisteredException e) {
         log.debug(CustomResponseCode.NOT_REGISTERED_ERROR.name(), e);
         return this.generateErrorResponse(CustomResponseCode.NOT_REGISTERED_ERROR);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<GlobalRes<Void>> accessDeniedHandle(AccessDeniedException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> accessDeniedHandle(AccessDeniedException e) {
         log.debug(CustomResponseCode.UNAUTHORIZED_ERROR.name(), e);
         // 현재 로그인한 사용자의 정보를 컨텍스트에서 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,31 +50,31 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<GlobalRes<Void>> invalidTokenHandle(InvalidTokenException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> invalidTokenHandle(InvalidTokenException e) {
         log.debug(CustomResponseCode.INVALID_TOKEN_ERROR.name(), e);
         return this.generateErrorResponse(CustomResponseCode.INVALID_TOKEN_ERROR);
     }
 
     @ExceptionHandler(DeletedRecordException.class)
-    public ResponseEntity<GlobalRes<Void>> deletedRecordHandle(DeletedRecordException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> deletedRecordHandle(DeletedRecordException e) {
         log.debug(CustomResponseCode.NOT_FOUND_DATA_ERROR.name(), e);
         return this.generateErrorResponse(CustomResponseCode.NOT_FOUND_DATA_ERROR);
     }
 
     @ExceptionHandler(DuplicatedRecordException.class)
-    public ResponseEntity<GlobalRes<Void>> duplicatedRecordHandle(DuplicatedRecordException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> duplicatedRecordHandle(DuplicatedRecordException e) {
         log.debug(CustomResponseCode.DUPLICATED_DATA_ERROR.name(), e);
         return this.generateErrorResponse(CustomResponseCode.DUPLICATED_DATA_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<GlobalRes<Void>> methodArgumentTypeMismatchHandle(MethodArgumentTypeMismatchException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> methodArgumentTypeMismatchHandle(MethodArgumentTypeMismatchException e) {
         log.debug(CustomResponseCode.INVALID_PARAMETER_ERROR.name(), String.format("%s : 필드를 확인해 주세요.", e.getName()));
         return this.generateErrorResponse(CustomResponseCode.INVALID_PARAMETER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<GlobalRes<Void>> methodArgumentNotValidHandle(MethodArgumentNotValidException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> methodArgumentNotValidHandle(MethodArgumentNotValidException e) {
         Map<String, String> errors = e.getBindingResult()
             .getFieldErrors()
             .stream()
@@ -89,24 +89,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(FileManagedException.class)
-    public ResponseEntity<GlobalRes<Void>> fileManagedHandle(FileManagedException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> fileManagedHandle(FileManagedException e) {
         log.debug(CustomResponseCode.FILE_MANAGED_ERROR.name(), e);
         return this.generateErrorResponse(CustomResponseCode.FILE_MANAGED_ERROR);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<GlobalRes<Void>> notFoundHandle(NoResourceFoundException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> notFoundHandle(NoResourceFoundException e) {
         return this.generateErrorResponse(CustomResponseCode.NOT_FOUND_ERROR);
     }
 
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity<GlobalRes<Void>> sqlHandle(SQLException e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> sqlHandle(SQLException e) {
         log.error("DB 에러", e);
         return this.generateErrorResponse(CustomResponseCode.DB_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<GlobalRes<Void>> othersHandle(Exception e) {
+    public ResponseEntity<GlobalResponseDTO<Void>> othersHandle(Exception e) {
         log.error("시스템 에러", e);
         return this.generateErrorResponse(CustomResponseCode.SYSTEM_ERROR);
     }

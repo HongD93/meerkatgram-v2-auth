@@ -25,6 +25,21 @@ public class CookieManager {
         );
     }
 
+    public Optional<String> getRefreshTokenToCookie(HttpServletRequest request) {
+        return this.getCookie(request, jwtConfig.refreshTokenCookieName())
+            .map(Cookie::getValue);
+    }
+
+    public void removeRefreshTokenToCookie(HttpServletResponse response) {
+        this.setCookie(
+            response
+            , jwtConfig.refreshTokenCookieName()
+            , null
+            , 0
+            , jwtConfig.reissueUri()
+        );
+    }
+
     /**
      * Request Header에서 특정 쿠키를 획득 (Optional 반환)
      * @param request 리퀘스트
