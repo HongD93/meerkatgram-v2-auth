@@ -60,8 +60,7 @@ logging:
     name: logs/error.log
   level:
     root: info
-    com.msameerkatgramv2auth.controllers: debug
-    com.msameerkatgramv2auth.global.errors: debug
+    com.msameerkatgramv2auth: debug
 
 # JWT
 jwt:
@@ -77,16 +76,18 @@ jwt:
   scheme: Bearer
   reissue-uri: /api/auth/reissue-token
 
-# file
-file:
-  server-uri: ${FILE_SERVER_URI}
-  storage-path: ${FILE_STORAGE_PATH}
-  profile-path: /files/profiles
-  allow-extension-list: [
-    "image/jpg",
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "image/svg",
-    "image/webp"
-  ]
+# minio
+minio:
+  minio-endpoint: ${MINIO_ENDPOINT}
+  minio-bucket: ${MINIO_BUCKET}
+  minio-access-key: ${MINIO_ACCESS_KEY}
+  minio-secret-key: ${MINIO_SECRET_KEY}
+  minio-profile-path: ${MINIO_PROFILE_PATH}
+  allow-image-extensions:
+    [
+      " image/jpg",
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp"
+      ]

@@ -50,6 +50,9 @@ dependencies {
     // Configuration
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
+    // Minio SDK
+    implementation "io.minio:minio:8.6.0"
+
     // DB
     runtimeOnly 'com.mysql:mysql-connector-j'
 
