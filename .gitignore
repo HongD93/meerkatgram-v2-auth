@@ -6,7 +6,7 @@ storage/
 !**/src/main/**/build/
 !**/src/test/**/build/
 error.log
-*.log
+/log
 .env
 
 ### STS ###
