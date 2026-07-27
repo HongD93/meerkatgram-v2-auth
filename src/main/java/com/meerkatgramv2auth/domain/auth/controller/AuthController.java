@@ -1,6 +1,7 @@
 package com.meerkatgramv2auth.domain.auth.controller;
 
 import com.meerkatgramv2auth.domain.auth.request.LoginRequestDTO;
+import com.meerkatgramv2auth.domain.auth.request.RegistrationRequestDTO;
 import com.meerkatgramv2auth.domain.auth.response.AuthResponseDTO;
 import com.meerkatgramv2auth.domain.auth.service.AuthService;
 import com.meerkatgramv2auth.global.config.openapi.CustomApiResponse;
@@ -8,6 +9,7 @@ import com.meerkatgramv2auth.global.response.GlobalResponseDTO;
 import com.meerkatgramv2auth.global.response.constant.CustomResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -78,5 +80,20 @@ public class AuthController {
         HttpServletResponse response
     ) {
         return ResponseEntity.ok(GlobalResponseDTO.success(authService.reissue(request, response)));
+    }
+
+    @Operation(summary = "회원가입 처리")
+    @SecurityRequirements
+    @CustomApiResponse(value = {
+        CustomResponseCode.INVALID_PARAMETER_ERROR,
+        CustomResponseCode.DB_ERROR,
+        CustomResponseCode.SYSTEM_ERROR
+    })
+    @PostMapping("/registration")
+    public ResponseEntity<GlobalResponseDTO<Void>> auth(
+        @Valid @RequestBody RegistrationRequestDTO registrationRequestDTO
+    ) {
+        authService.registration(registrationRequestDTO);
+        return ResponseEntity.ok(GlobalResponseDTO.success());
     }
 }
