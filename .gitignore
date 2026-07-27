@@ -5,8 +5,7 @@ storage/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-error.log
-/log
+logs/
 .env
 
 ### STS ###

@@ -85,7 +85,7 @@ minio:
   minio-profile-path: ${MINIO_PROFILE_PATH}
   allow-image-extensions:
     [
-      " image/jpg",
+      "image/jpg",
       "image/jpeg",
       "image/png",
       "image/gif",
