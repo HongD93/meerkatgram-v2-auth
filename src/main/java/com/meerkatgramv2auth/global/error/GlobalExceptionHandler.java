@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<GlobalResponseDTO<Void>> methodArgumentTypeMismatchHandle(MethodArgumentTypeMismatchException e) {
-        log.debug(CustomResponseCode.INVALID_PARAMETER_ERROR.name(), String.format("%s : 필드를 확인해 주세요.", e.getName()));
+        log.debug("{}\n{}", CustomResponseCode.INVALID_PARAMETER_ERROR.name(), String.format("%s : 필드를 확인해 주세요.", e.getName()));
         return this.generateErrorResponse(CustomResponseCode.INVALID_PARAMETER_ERROR);
     }
 
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
                 (existing, replacement) -> existing // 중복 필드가 있을 경우 기존 값 유지
             ));
 
-        log.debug(CustomResponseCode.INVALID_PARAMETER_ERROR.name(), errors);
+        log.debug("{}\n{}", CustomResponseCode.INVALID_PARAMETER_ERROR.name(), errors);
         return this.generateErrorResponse(CustomResponseCode.INVALID_PARAMETER_ERROR);
     }
 
