@@ -1,6 +1,8 @@
 package com.meerkatgramv2auth.global.security.filter;
 
+import com.meerkatgramv2auth.global.security.filter.HeaderAuthenticationFilter;
 import com.meerkatgramv2auth.global.security.oauth2.DelegatingOAuth2UserService;
+import com.meerkatgramv2auth.global.security.oauth2.OAuth2FailureHandler;
 import com.meerkatgramv2auth.global.security.oauth2.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +28,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, com.meerkatgramv2auth.global.security.filter.HeaderAuthenticationFilter headerAuthenticationFilter, DelegatingOAuth2UserService delegatingOAuth2UserService, OAuth2SuccessHandler oAuth2SuccessHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, HeaderAuthenticationFilter headerAuthenticationFilter, DelegatingOAuth2UserService delegatingOAuth2UserService, OAuth2SuccessHandler oAuth2SuccessHandler, OAuth2FailureHandler oAuth2FailureHandler) throws Exception {
         return httpSecurity
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
             .httpBasic(AbstractHttpConfigurer::disable) // 화면 생성 비활성화
@@ -41,7 +43,7 @@ public class SecurityConfiguration {
                     userInfo.userService(delegatingOAuth2UserService) // provider 라우팅 처리 서비스 등록
                 )
                 .successHandler(oAuth2SuccessHandler) // 성공 핸들러 등록
-                // .failureHandler() // 실패 핸들러 등록
+                .failureHandler(oAuth2FailureHandler) // 실패 핸들러 등록
             )
             .build();
     }

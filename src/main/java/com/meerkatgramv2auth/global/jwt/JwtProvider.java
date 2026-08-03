@@ -1,7 +1,8 @@
 package com.meerkatgramv2auth.global.jwt;
 
+import com.meerkatgramv2auth.global.jwt.JwtConfig;
 import com.meerkatgramv2auth.domain.user.entity.User;
-import com.meerkatgramv2auth.global.error.custom.InvalidTokenException;
+import com.meerkatgramv2auth.global.error.custom.business.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,10 +13,10 @@ import java.util.Date;
 
 @Component
 public class JwtProvider {
-    private final com.meerkatgramv2auth.global.jwt.JwtConfig jwtConfig;
+    private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
 
-    public JwtProvider(com.meerkatgramv2auth.global.jwt.JwtConfig jwtConfig) {
+    public JwtProvider(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.secret()));
     }

@@ -5,9 +5,11 @@ import com.meerkatgramv2auth.domain.auth.request.LoginRequestDTO;
 import com.meerkatgramv2auth.domain.auth.request.RegistrationRequestDTO;
 import com.meerkatgramv2auth.domain.auth.response.AuthResponseDTO;
 import com.meerkatgramv2auth.domain.user.entity.User;
+import com.meerkatgramv2auth.global.config.jpa.JPAWithDeleted;
 import com.meerkatgramv2auth.global.cookie.CookieManager;
-import com.meerkatgramv2auth.global.error.custom.InvalidTokenException;
-import com.meerkatgramv2auth.global.error.custom.NotRegisteredException;
+import com.meerkatgramv2auth.global.error.custom.business.DuplicatedResourceException;
+import com.meerkatgramv2auth.global.error.custom.business.InvalidTokenException;
+import com.meerkatgramv2auth.global.error.custom.business.NotRegisteredException;
 import com.meerkatgramv2auth.global.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +42,7 @@ public class AuthService {
 
     @Transactional(rollbackFor = Exception.class)
     public AuthResponseDTO reissue(HttpServletRequest request, HttpServletResponse response) {
-        // 쿠키 리프레시 토큰 획득
+        // 쿠키 리프래시 토큰 획득
         String refreshToken = cookieManager.getRefreshTokenToCookie(request)
             .orElseThrow(() -> new InvalidTokenException("리프레시 토큰 없음"));
 
@@ -55,12 +57,12 @@ public class AuthService {
             throw new InvalidTokenException("비로그인 상태입니다.");
         }
 
-        // 리프레시 토큰 일치 확인
+        // 리프래시 토큰 일치 확인
         if(!refreshToken.equals(user.getRefreshToken())) {
             throw new InvalidTokenException("토큰 불일치입니다.");
         }
 
-        // 인증 정보 생성 및 리턴
+        // 인증 정보생성 및 리턴
         return this.generateAuthentication(response, user);
     }
 
@@ -83,18 +85,26 @@ public class AuthService {
     public void logout(HttpServletResponse response, long userId) {
         // 유저 정보 획득
         User user = authRepository.findById(userId)
-            .orElseThrow(() -> new InvalidTokenException("유효하지 않은 회원입니다."));
+            .orElseThrow(() -> new InvalidTokenException("유효하지 않는 회원입니다."));
 
-        // DB에 저장한 리프레시 토큰 파기
+        // DB에 저장한 리프래시 토큰 파기
         user.setRefreshToken(null);
         authRepository.save(user);
 
-        // Cookie에 저장한 리프레시 토큰 파기
+        // Cookie에 저장한 리프래시토큰 파기
         cookieManager.removeRefreshTokenToCookie(response);
     }
 
+    @JPAWithDeleted
     @Transactional(rollbackFor = Exception.class)
     public void registration(RegistrationRequestDTO registrationRequestDTO) {
+        // authRepository.findByEmail(registrationRequestDTO.email())
+        //     .ifPresent(user -> { throw new DuplicatedResourceException("이미 가입된 이메일 입니다."); });
+
+        if(authRepository.existsByEmail(registrationRequestDTO.email())) {
+            throw new DuplicatedResourceException("이미 가입된 이메일 입니다.");
+        }
+
         User user = new User();
         user.setEmail(registrationRequestDTO.email());
         user.setPassword(passwordEncoder.encode(registrationRequestDTO.password()));
