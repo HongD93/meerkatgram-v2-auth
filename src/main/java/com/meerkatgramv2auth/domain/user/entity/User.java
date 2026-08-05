@@ -5,6 +5,8 @@ import com.meerkatgramv2auth.global.security.constant.RolePolicy;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
+@FilterDef(name = "softDelete")
+@Filter(name = "softDelete", condition = "deleted_at IS NULL")
 @Getter
 @Setter
 public class User {
