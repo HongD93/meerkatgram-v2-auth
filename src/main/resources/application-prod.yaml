@@ -7,8 +7,8 @@ spring:
     version: v1
   web:
     error:
-      include-stacktrace: always
-      include-message: always
+      include-stacktrace: never
+      include-message: never
 
   servlet:
     multipart:
@@ -28,8 +28,8 @@ spring:
   # JPA
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: none
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -38,7 +38,7 @@ spring:
   sql:
     init:
       data-locations: classpath*:dummy/*.sql
-      mode: always
+      mode: never
       platform: all
 
   # Security & OAuth2
@@ -92,8 +92,8 @@ logging:
   file:
     name: logs/error.log
   level:
-    root: info
-    com.msameerkatgramv2auth: debug
+    root: warn
+    com.msameerkatgramv2auth: error
 
 # JWT
 jwt:
