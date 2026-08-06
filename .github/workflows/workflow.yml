@@ -11,6 +11,8 @@ on:
 env:
   # ghcr.io에 올릴 이미지명 설정
   IMAGE_NAME: auth-service
+  # 매니페스트 작업 디렉토리
+  MANIFEST_WORK_DIR: manifest
   # 매니페스트를 올릴 대상 레포
   MANIFEST_REPO: hongd93/msa4-k8s-manifest
   # 해당 메니페스트 레파지토리의 경로
