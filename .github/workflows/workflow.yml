@@ -14,7 +14,7 @@ env:
   # 매니페스트를 올릴 대상 레포
   MANIFEST_REPO: hongd93/msa4-k8s-manifest
   # 해당 메니페스트 레파지토리의 경로
-  MANIFEST_PATH: auth-service
+  MANIFEST_PATH: auth
 
 # 해당 워크플로우가 실행 중 GITHUB_TOKEN에 부여할 권한 설정
 permissions:
